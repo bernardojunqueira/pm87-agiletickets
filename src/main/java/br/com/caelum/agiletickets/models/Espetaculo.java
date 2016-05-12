@@ -2,6 +2,7 @@ package br.com.caelum.agiletickets.models;
 
 import static com.google.common.collect.Lists.newArrayList;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -13,8 +14,10 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.joda.time.Days;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
+import org.joda.time.Weeks;
 
 @Entity
 public class Espetaculo {
@@ -96,9 +99,51 @@ public class Espetaculo {
      * 
      * Repare que a data da primeira sessao é sempre a data inicial.
      */
+	//public List<Sessao> criaSessoes(LocalDate inicio, LocalDate fim, LocalTime horario, Periodicidade periodicidade, Integer totalIngressos, Integer duracaoEmMinutos) {
 	public List<Sessao> criaSessoes(LocalDate inicio, LocalDate fim, LocalTime horario, Periodicidade periodicidade) {
-		// ALUNO: Não apague esse metodo. Esse sim será usado no futuro! ;)
-		return null;
+		
+		
+		List<Sessao> sessoes = new ArrayList<Sessao>();
+		
+		if (periodicidade == Periodicidade.DIARIA) {
+			
+			Integer dias = Days.daysBetween(inicio, fim).getDays();
+			System.out.println(dias);
+			for (Integer i = 0; i <= dias; i++) {
+				Sessao sessao = new Sessao();
+				sessao.setEspetaculo(this);
+				//sessao.setTotalIngressos(totalIngressos);
+				//sessao.setDuracaoEmMinutos(duracaoEmMinutos);
+				sessao.setInicio(inicio.plusDays(i).toDateTime(horario));
+				System.out.println(inicio.plusDays(i).toDateTime(horario));
+				sessoes.add(sessao);
+			}
+			
+			return sessoes;
+			
+		} else {
+			
+			if (Days.daysBetween(inicio, fim).getDays() < 0) {
+				return sessoes;
+			}
+			
+			Integer semanas = Weeks.weeksBetween(inicio, fim).getWeeks();
+			System.out.println("## Semanas: " + semanas);
+			
+			for (Integer i = 0; i <= semanas; i++) {
+				Sessao sessao = new Sessao();
+				sessao.setEspetaculo(this);
+				//sessao.setTotalIngressos(totalIngressos);
+				//sessao.setDuracaoEmMinutos(duracaoEmMinutos);
+				sessao.setInicio(inicio.plusWeeks(i).toDateTime(horario));
+				System.out.println(inicio.plusWeeks(i).toDateTime(horario));
+				sessoes.add(sessao);
+			}
+			
+			return sessoes;
+		}
+		
+		
 	}
 	
 	public boolean Vagas(int qtd, int min)
