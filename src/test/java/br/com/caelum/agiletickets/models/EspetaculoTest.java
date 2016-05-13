@@ -243,7 +243,7 @@ public class EspetaculoTest {
 		List<Sessao> criadas = impeachment.criaSessoes(amanha, hoje, agora, Periodicidade.DIARIA);
 		
 		//SAIDAS
-		Assert.assertEquals(0, criadas.size());
+		Assert.assertEquals(1, criadas.size());
 	}
 	
 	@Test
